@@ -83,9 +83,13 @@ async def run_chat(user_id):
         console.print(Rule(style="grey50"))
 
         with console.status("[bold green] Working..."):
+
+            # We are passing the entire conversation stack of the current session to the model
+            # Mem0 does not do this. It seperately creates a conversation summary when chats get too long.
+            # I ignored this step to keep the code simple.
             with dspy.context(lm=model):
                 out = await response_generator.acall(
-                    transcript=past_messages,
+                    transcript=past_messages,  # TODO: Unbounded transcript
                     question=question,
                     existing_categories=existing_categories,
                 )
@@ -113,7 +117,4 @@ async def run_chat(user_id):
                 # Refresh the existing categories that's searchable
                 existing_categories = await get_all_categories(user_id=user_id)
 
-
         console.print(f"\nAI: {response}\n\n", style="bold green")
-
-

@@ -1,10 +1,9 @@
 import asyncio
 from mem.response_generator import run_chat
+import sys
 
-async def main():
-    import sys
+async def main(user_id):
 
-    user_id = 1
     try:
         await run_chat(user_id)
     except KeyboardInterrupt:
@@ -15,4 +14,8 @@ async def main():
 
 
 if __name__ == "__main__":
-    response = asyncio.run(main())
+    if len(sys.argv) > 1:
+        user_id = int(sys.argv[1])
+    else:
+        user_id = 1
+    response = asyncio.run(main(user_id))

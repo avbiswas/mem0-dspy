@@ -13,8 +13,15 @@ from mem.update_memory import update_memories
 from mem.vectordb import get_all_categories, search_memories, stringify_retrieved_point
 
 console = Console(log_path=False)
+dspy.configure_cache(
+    enable_disk_cache=False,
+    enable_memory_cache=False,
+)
 
-model = dspy.LM(model="gemini/gemini-2.0-flash")
+
+model = dspy.LM(
+    model="gpt-5-mini", reasoning_effort="minimal", temperature=1, max_tokens=16000
+)
 
 
 class ResponseGenerator(dspy.Signature):

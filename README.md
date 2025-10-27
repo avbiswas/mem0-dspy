@@ -41,6 +41,18 @@ I also used QDrant as my vector database, and DSPy to generate structured output
 - **Async Architecture**: Built with async/await for efficient concurrent operations
 - **Qdrant Integration**: Local vector database for fast similarity search
 
+
+## Running the code
+
+To run the memory-enabled chatbot, first follow the installation process listed below. Crucially, you must set up the environment variables, have a Qdrant server running, and then run the following command:
+`uv run main.py`
+
+You can also add a user_id when running main.py
+`uv run main.py 2`
+
+Note that user_id needs to be an integer.
+
+
 ## Getting Started
 
 ### Prerequisites
@@ -78,9 +90,8 @@ I also used QDrant as my vector database, and DSPy to generate structured output
     
     **Required API Keys:**
     - `OPENAI_API_KEY` - For OpenAI models (embeddings and chat)
-    - `GEMINI_API_KEY` - For Google Gemini models  
 
-    Model names (like gpt-5-mini and gemini-2.0-flash) are hardcoded at certain sections of the code. Feel free to overwrite them, or hide them behind a config file!
+    `gpt-5-mini` is hardcoded at certain sections of the code. Feel free to overwrite it, or hide model names behind a config file!
 
     To run the `basic_mem0_chatbot.py` script, you will also need a MEM0_API_KEY. [Get Mem0 API Key here](https://mem0.dev/api-keys-avb)
 
@@ -91,7 +102,6 @@ I also used QDrant as my vector database, and DSPy to generate structured output
     ```bash
     # Install direnv first, then create .envrc file
     echo "export OPENAI_API_KEY=your_key_here" >> .envrc
-    echo "export GEMINI_API_KEY=your_key_here" >> .envrc
     direnv allow
     ```
     
@@ -103,14 +113,12 @@ I also used QDrant as my vector database, and DSPy to generate structured output
     Add your keys to `.env`:
     ```env
     OPENAI_API_KEY=your_key_here
-    GEMINI_API_KEY=your_key_here
     ```
     *Note: This requires adding `dotenv.load_dotenv()` to your Python scripts.*
     
     **Option 3: Export environment variables**
     ```bash
     export OPENAI_API_KEY=your_key_here
-    export GEMINI_API_KEY=your_key_here
     ```
 
 5.  **Initialize the Qdrant collection:**
@@ -121,7 +129,12 @@ I also used QDrant as my vector database, and DSPy to generate structured output
 6.  **Run the chatbot:**
     ```bash
     # Custom implementation with DSPy and Qdrant
+    # Default user_id (1)
     uv run main.py
+    
+    # Or specify a custom user_id
+    uv run main.py <user_id>
+    # Example: uv run main.py 42
     
     # Or the basic mem0 implementation
     uv run python basic_mem0_chatbot.py
@@ -129,12 +142,13 @@ I also used QDrant as my vector database, and DSPy to generate structured output
 
 ## Recommended changes to do before you can use in Prod
 
-- A lot of the code is structured to showcase how memory retrieval works. If you are thinking to use this in prod, I will recommend to run some of the code (especially about memory upkeeping) as a background process instead of a blocking call.
-- In-session memory management - summarize multi-turn chat into a single string when they reach a certain length. The current code keeps passing the entire history of chat into the LLM at each step. This could be slow if you're not hitting KV Cache.
-- Better UI/UX experience optimized to lower Time-to-first-token
-- Create a config file that contains runtime configurations. Some important ones are:
+- **Background Processes** : A lot of the code is structured to showcase how memory retrieval works. If you are thinking to use this in prod, I will recommend to run some of the code (especially about memory upkeeping) as a background process instead of a blocking call.
+- **In-session memory management**: Summarize multi-turn chat into a single string when they reach a certain length. The current code keeps passing the entire history of chat into the LLM at each step. This could be slow if you're not hitting KV Cache.
+- Better **UI/UX experience** optimized to lower Time-to-first-token
+- **Create a config file** that contains runtime configurations. Some important ones are:
     - LLMs used for retrieval/updating/response gen
     - Embedding size of text vectors
+- **Logging, Tracing, Error Handling** at various stages of the code
 
 ## Project Structure
 

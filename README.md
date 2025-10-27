@@ -19,16 +19,18 @@ If you find this content helpful, please consider supporting my work on Patreon.
 
 ## Relevant external links
 
-The architecture is inspired heavily by Mem0.
-Check out Mem0 here: https://mem0.dev/avb
-Mem0 Github - https://mem0.dev/github/avb
-Get Mem0 API Key - https://mem0.dev/api-keys-avb
-Mem0 Paper: https://arxiv.org/abs/2504.19413
+The architecture is inspired heavily by Mem0. Here are some links to get started with Mem0.
 
-I also used QDrant as my vector database, and DSPy to generate structured outputs and do tool-calls.    
-QDrant: https://qdrant.tech/
-Self hosting Qdrant: https://qdrant.tech/documentation/quickstart/
-DSPy: https://dspy.ai/
+- Check out Mem0 here: https://mem0.dev/avb
+- Mem0 Github - https://mem0.dev/github/avb
+- Get Mem0 API Key - https://mem0.dev/api-keys-avb
+- Mem0 Paper: https://arxiv.org/abs/2504.19413
+
+I also used QDrant as my vector database, and DSPy to generate structured outputs and do tool-calls.
+
+- QDrant: https://qdrant.tech/
+- Self hosting Qdrant: https://qdrant.tech/documentation/quickstart/
+- DSPy: https://dspy.ai/
 
 ## Features
 
@@ -125,6 +127,15 @@ DSPy: https://dspy.ai/
     uv run python basic_mem0_chatbot.py
     ```
 
+## Recommended changes to do before you can use in Prod
+
+- A lot of the code is structured to showcase how memory retrieval works. If you are thinking to use this in prod, I will recommend to run some of the code (especially about memory upkeeping) as a background process instead of a blocking call.
+- In-session memory management - summarize multi-turn chat into a single string when they reach a certain length. The current code keeps passing the entire history of chat into the LLM at each step. This could be slow if you're not hitting KV Cache.
+- Better UI/UX experience optimized to lower Time-to-first-token
+- Create a config file that contains runtime configurations. Some important ones are:
+    - LLMs used for retrieval/updating/response gen
+    - Embedding size of text vectors
+
 ## Project Structure
 
 ### Main Files
@@ -143,9 +154,7 @@ DSPy: https://dspy.ai/
 
 ### 1. Basic Flow
 
-```mermaid
 User Input → Search Memories → Generate Response → Update Memory (if needed) → Display Response
-```
 
 ### 2. Memory Management
 
@@ -163,21 +172,6 @@ Memories are:
 - Retrieved using semantic similarity with configurable score thresholds
 - Organized by categories for efficient filtering
 
-## Configuration
-
-### Qdrant Settings (`mem/vectordb.py`)
-
-```python
-client = AsyncQdrantClient(url="http://localhost:6333")
-COLLECTION_NAME = "memories"
-```
-
-Modify the URL to use Qdrant Cloud or a different host.
-
-
-## Major change to do before you can use in Prod
-
-A lot of the code is structured to showcase how memory retrieval works. If you are thinking to use this in prod, I will recommend to run some of the code (especially about memory upkeeping) as a background process instead of a blocking call.
 
 ## Contributing
 

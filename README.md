@@ -45,12 +45,12 @@ I also used QDrant as my vector database, and DSPy to generate structured output
 ## Running the code
 
 To run the memory-enabled chatbot, first follow the installation process listed below. Crucially, you must set up the environment variables, have a Qdrant server running, and then run the following command:
-`uv run main.py`
+```uv run main.py```
 
-You can also add a user_id when running main.py
-`uv run main.py 2`
+You can also add a user_id when running main.py.
+```uv run main.py 2```
 
-Note that user_id needs to be an integer.
+Note that user_id needs to be an integer. All memories are user-scoped.
 
 
 ## Getting Started

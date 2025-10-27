@@ -1,0 +1,3 @@
+.envrc
+mem/qdrant_storage
+*__pycache__*
